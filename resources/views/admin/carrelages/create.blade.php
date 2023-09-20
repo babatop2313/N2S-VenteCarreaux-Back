@@ -13,6 +13,22 @@ tinymce.init({
 
 @endpush
 @section('content')
+ @if (Session::has('error'))
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-ban"></i>Erreur</h4> {{Session::get('error')}}
+    
+    </div> 
+@endif
+
+@if (Session::has('success'))
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-check"></i> Success!</h4> {{Session::get('success')}}
+    
+    </div>
+
+@endif
 
 <div class="row">
   
@@ -28,9 +44,10 @@ tinymce.init({
                 <div class="form-group col-6">
                     <label>Catégorie</label>
                     <Select class="form-control" name="categorie" aria-label="selectionner un categorie" style="opacity:15 !important;">
-                        <option value="" selected="selected">Selectionner une catégorie</option>
-                        <option value="céramique">Céramique</option>
-                        <option value="pierre">Pierre naturelle</option>
+                        <option value="empty" selected="selected">Selectionner une catégorie</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type->nomType }}">{{ $type->nomType }}</option>
+                        @endforeach
                     </Select>
                 </div>
                 <div class="form-group col-6">

@@ -30,8 +30,9 @@ tinymce.init({
                 <label>Catégorie</label>
                 <Select class="form-control" name="categorie" aria-label="selectionner un categorie" style="opacity:15 !important;">
                     <option value="{{ $carrelage->categorie }}" selected="selected">{{ $carrelage->categorie }}</option>
-                        <option value="céramique">Céramique</option>
-                        <option value="pierre">Pierre naturelle</option>
+                        @foreach ($types as $type)
+                            <option value="{{ $type->nomType }}">{{ $type->nomType }}</option>
+                        @endforeach
                 </Select>
             </div>
             <div class="form-group">

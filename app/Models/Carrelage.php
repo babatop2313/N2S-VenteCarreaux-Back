@@ -37,4 +37,9 @@ class Carrelage extends Model
     {
         return $this->hasMany(Like::class);
     }
+
+    public function type_prduit()
+    {
+        return $this->belongsTo(TypePrduit::class);
+    }
 }

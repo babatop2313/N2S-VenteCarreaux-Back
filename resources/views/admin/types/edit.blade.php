@@ -1,0 +1,124 @@
+
+@extends('layouts.app')
+@section('content')
+		
+			
+				<!-- Content Header (Page header) -->
+    <section class="content-header">					
+		<div class="container-fluid my-2">
+			<div class="row mb-2">
+				<div class="col-sm-6">
+					<h1>Editer un type</h1>
+				</div>
+				<div class="col-sm-6 text-right">
+						<a href="{{route('types.index')}}" class="btn btn-primary">Retour</a>
+				</div>
+			</div>
+			</div>
+					<!-- /.container-fluid -->
+	</section>
+				<!-- Main content -->
+	<section class="content">
+					<!-- Default box -->
+		<div class="container-fluid">
+            <form action="{{ route('types.update', $type) }}" method="post">
+                @csrf
+                @method('PUT')
+				<div class="card">
+					<div class="card-body">								
+					   <div class="row">
+						    <div class="col-md-6">
+								<div class="mb-3">
+									<label for="nomType">Nom</label>
+									<input type="text" name="nomType" id="nomType" class="form-control @error('nomType') is-invalid @enderror" placeholder="Nom" value="{{$type->nomType}}">	
+								</div>
+
+                                @error('nomType')
+                                <p class="invalid-feedback">{{$message}}</p>
+                                
+                                 @enderror
+							</div>
+
+                            <div class="col-md-6">
+								<div class="mb-3">
+									<label for="statut">Statut</label>
+                                    <select name="statut" id="statut" class="form-control">
+                                        <option {{($type->statut==1) ? 'selected': ''}} value="1">Active</option>
+                                        <option {{($type->statut==0) ? 'selected': ''}} value="0">Block</option>
+
+                                    </select>
+								</div>
+
+                                @error('nomType')
+                                <p class="invalid-feedback">{{$message}}</p>
+                                
+                                 @enderror
+							</div>
+                            
+							<div class="col-md-6">
+                                <div class="md-3">
+                                    <input type="hidden" id="image_id" name="image_id">
+                                    <label for="image">Image</label>
+                                    <div id="image" class="dropzone dz-clickable">
+                                        <div class="dz-message needsclick">    
+                                            <br>Drop files here or click to upload.<br><br>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                @if(!empty($type->image))
+                                <div>
+                                    <img width="250" src="{{asset('uploads/type/'.$type->image)}}" alt="">
+                                </div>
+                                @endif
+                            </div>
+                           
+																
+					</div>
+				</div>							
+			</div>
+						<div class="pb-5 pt-3">
+							<button type="submit" class="btn btn-primary">Modifier</button>
+							<a href="#" class="btn btn-outline-dark ml-3">Cancel</a>
+						</div>
+
+			</form>
+		</div>
+					<!-- /.card -->
+	</section>
+				<!-- /.content -->
+			
+@endsection
+
+@section('customJs')
+    <script>
+
+        Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
+            init: function(){
+               this.on('addedfile', function(file){
+                    if(this.files.length > 1){
+                        this.removeFile(this.files[0]);
+                    }
+               }); 
+            },
+            url:  "{{ route('temp-images.create') }}",
+            maxFiles: 1,
+            paramName: 'image',
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }, success: function(file, response){
+                $("#image_id").val(response.image_id);
+                //this.removeFile(file);            
+            }
+        });
+    </script>
+
+
+
+
+
+
+@endsection
+

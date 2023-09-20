@@ -629,6 +629,12 @@
                         <span>Carreaux</span>
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('types.index') }}">
+                        <i class="fa fa-tools"></i>
+                        <span>Catégories</span>
+                        </a>
+                    </li>
                     
 
 

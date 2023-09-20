@@ -32,6 +32,23 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
         });
         return response()->json($carrelages);
     });
+    Route::get('/categories', function () {
+        $categories = App\Models\TypeProduit::all();
+        return response()->json($categories);
+    });
+    Route::get('/categorie/{nomType}', function ($nomType) {
+        $carrelages = App\Models\Carrelage::where('status','p')->where('categorie',$nomType)->with('blog_images')->orderBy('created_at','desc')->get();
+        //dd($carrelages[0]->blog_images[0]->blog_image);
+        // Mapper pour ajouter le lien URL de la photo de chaque carreau
+        $carrelages = $carrelages->map(function ($carrelage) {
+                    
+                foreach($carrelage->blog_images as $j){
+                    $j->blog_image = asset('uploads/'.$j->blog_image);
+                    return $carrelage;
+                }
+        });
+        return response()->json($carrelages);
+    });
     Route::get('/carrelage/{id}', function ($id)
     {
         $carrelage = App\Models\Carrelage::where('id',$id)->with('blog_images')->first();

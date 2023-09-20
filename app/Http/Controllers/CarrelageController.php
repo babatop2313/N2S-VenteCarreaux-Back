@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Carrelage;
 use App\Models\BlogImage;
+use App\Models\TypeProduit;
 use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -18,8 +19,9 @@ class CarrelageController extends Controller
     public function index(){
 
         $carrelages = Carrelage::with('blog_images')->orderBy('created_at','desc')->get();
+        $types = TypeProduit::all();
       
-        return view('admin.carrelages.index',['carrelages'=>$carrelages]);
+        return view('admin.carrelages.index',['carrelages'=>$carrelages , 'types'=>$types]);
     }
     public function actu(){
 
@@ -80,6 +82,10 @@ class CarrelageController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
       ]);
         
+        if ($request->categorie=='empty') 
+        {
+            return back()->withErrors(['error' => 'Veuillez sélectionner un categorie']);
+        }
         $user = session('the_user')[0];
         $nom = $request->nom;
         $description = $request->description;
@@ -89,7 +95,7 @@ class CarrelageController extends Controller
         $qte = $request->qte;
         $prix = $request->prix;
         
-          
+        
         $carrelage = Carrelage::where("id",$request->id)->update([
             'nom'=>$nom,
             'description'=>$description,
@@ -137,7 +143,10 @@ class CarrelageController extends Controller
             'description' => 'required',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
       ]);
-        
+        if ($request->categorie=='empty') 
+        {
+            return back()->withErrors(['error' => 'Veuillez sélectionner un categorie']);
+        }
         $user = User::where('id',session('the_user')[0]->id)->first();
         $nom = $request->nom;
         $description = $request->description;
@@ -188,8 +197,9 @@ class CarrelageController extends Controller
 
     public function editCarrelage(Request $request){
         $carrelage = Carrelage::where('id',(int)$request->id)->with('blog_images')->first();
+        $types = TypeProduit::all();
        
-        return view('admin.carrelages.edit',['carrelage'=>$carrelage]);
+        return view('admin.carrelages.edit',['carrelage'=>$carrelage , 'types'=>$types]);
     }
 
     

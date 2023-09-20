@@ -6,6 +6,7 @@ use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ContributionController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\TypeProduitController;
 
 
 
@@ -91,6 +92,15 @@ Route::group(['middleware' => 'admin'], function () {
     Route::get('update_password', [UtilisateurController::class, 'update_password'])->name('update_password');
     Route::get('users/show_compte/{id}',[UtilisateurController::class,'show_compte'])->name('show_compte');
     Route::post('changePassword',[UtilisateurController::class,'changePassword'])->name('changePassword');
+
+     //TYPES ROUTES
+        Route::get('/types', [TypeProduitController::class, 'index'])->name('types.index');
+        Route::get('/types/create', [TypeProduitController::class, 'create'])->name('types.create');
+        Route::post('/types', [TypeProduitController::class, 'store'])->name('types.store');
+        Route::get('/types/{type}/edit', [TypeProduitController::class, 'edit'])->name('types.edit');
+        Route::put('/types/{type}', [TypeProduitController::class, 'update'])->name('types.update');
+        Route::delete('/types/{type}', [TypeProduitController::class, 'destroy'])->name('types.destroy');
+        
 });
 
 Route::group(['middleware' => 'membre'], function () {

@@ -33,7 +33,9 @@ class CarrelageController extends Controller
 
 /*     afficher le formulaire de creation de carrelage */
     public function create(){
-        return view('admin.carrelages.create');
+        $types = TypeProduit::latest()->paginate(20);
+       // return view('admin.types.index', compact('types'));
+        return view('admin.carrelages.create', compact('types'));
     }
     
 /*     change status carrelage  */
